@@ -1,0 +1,4 @@
+echo "Flask" > requirements.txt
+echo "boto3" >> requirements.txt
+echo "pymongo" >> requirements.txt
+echo "python-dotenv" >> requirements.txt
