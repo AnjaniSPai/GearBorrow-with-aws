@@ -1,0 +1,194 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GearBorrow | Rental Confirmed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0d1117; background: linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url('/static/bg1.jpeg') no-repeat center center fixed; background-size: cover; color: #c9d1d9; height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background: rgba(22, 27, 34, 0.8); border: 1px solid #3fb950; border-radius: 4px; padding: 60px 40px; text-align: center; box-shadow: 0 0 30px rgba(63, 185, 80, 0.1); max-width: 500px; width: 100%; backdrop-filter: blur(10px); }
+        .emoji { font-size: 4rem; margin-bottom: 20px; filter: drop-shadow(0px 0px 15px rgba(63,185,80,0.4)); }
+        h2 { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 2.5rem; color: #3fb950; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        p { line-height: 1.6; color: #8b949e; margin-bottom: 30px; font-size: 1.1rem; }
+        
+        .aws-note { background: rgba(13, 17, 23, 0.8); color: #58a6ff; padding: 15px; border-radius: 3px; font-size: 0.85rem; margin-bottom: 30px; text-align: left; border-left: 3px solid #58a6ff; font-family: monospace; }
+        
+        button { background: transparent; color: #3fb950; border: 2px solid #3fb950; padding: 16px 20px; cursor: pointer; font-family: 'Rajdhani', sans-serif; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; font-size: 1.1rem; width: 100%; transition: 0.3s; border-radius: 3px; }
+        button:hover { background: #3fb950; color: #0d1117; box-shadow: 0 0 15px rgba(63, 185, 80, 0.4); }
+    </style>
+</head>
+<body>
+    <!--
+    <div class="card">
+        <div class="emoji">✨</div>
+        <h2>Deployment Confirmed</h2>
+        <p>Your <strong>{{ qty }}x {{ item.name }}</strong> has been successfully secured for a {{ days }}-cycle deployment.</p>
+        <!--<p>Your <strong>{{ item.name }}</strong> has been successfully secured for a {{ days }}-cycle deployment.</p>
+        
+        <div class="aws-note">
+            > SYSTEM ARCHITECTURE LOG:<br>
+            > [SUCCESS] Transaction written to NoSQL Database (MongoDB/DynamoDB Mock).<br>
+            > [SUCCESS] Auth token verified for active session.
+        </div>
+
+        <a href="/" style="text-decoration: none;">
+            <button>Return to Armory</button>
+        </a>
+    </div>
+    
+    <h2>Deployment Confirmed</h2>
+        <p>Your <strong>{{ qty }}x {{ item.name }}</strong> has been successfully secured for a {{ days }}-cycle deployment.</p>
+        
+        <div style="background: rgba(255, 123, 0, 0.1); border: 1px solid #ff7b00; padding: 15px; margin-bottom: 20px; border-radius: 4px; color: white;">
+            <div style="font-size: 0.85rem; color: #ff7b00; text-transform: uppercase;">Transaction Total</div>
+            <div style="font-size: 2rem; font-family: 'Rajdhani', sans-serif; font-weight: bold;">₹{{ cost }}</div>
+            <div style="font-size: 0.8rem; color: #8b949e; font-family: monospace;">Receipt ID: {{ rec_id }}</div>
+        </div>
+
+        <div class="aws-note">
+            > SYSTEM ARCHITECTURE LOG:<br>
+            > [SUCCESS] Transaction written to NoSQL Receipts Database.<br>
+            > [SUCCESS] Auth token verified for active session.
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <a href="/" style="text-decoration: none; flex: 1;">
+                <button style="background: transparent; color: #8b949e; border-color: #8b949e;">Return to Armory</button>
+            </a>
+            <a href="/profile" style="text-decoration: none; flex: 1;">
+                <button>View Profile</button>
+            </a>
+        </div>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GearBorrow | Mission Success</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Centers the card perfectly on the screen */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(rgba(13, 17, 23, 0.9), rgba(13, 17, 23, 0.95)), url('/static/bg1.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: #c9d1d9;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* The new sleek floating modal */
+        .modal-container {
+            background: rgba(22, 27, 34, 0.7);
+            border: 1px solid #3fb950;
+            border-top: 4px solid #3fb950;
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(63, 185, 80, 0.15);
+            display: flex;
+            flex-direction: column; /* THIS FORCES VERTICAL STACKING */
+            gap: 20px; 
+        }
+
+        .success-icon { font-size: 3.5rem; margin: 0; }
+
+        h1 {
+            font-family: 'Rajdhani', sans-serif;
+            color: #ffffff;
+            margin: 0;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .item-desc { color: #8b949e; font-size: 1.1rem; line-height: 1.5; margin: 0; }
+        .item-desc strong { color: #58a6ff; }
+
+        .receipt-box {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 20px;
+        }
+        
+        .receipt-title { font-size: 0.8rem; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
+        .receipt-total { font-family: 'Rajdhani', sans-serif; font-size: 2.5rem; font-weight: bold; color: #ff7b00; margin: 5px 0; }
+        .receipt-id { font-family: monospace; font-size: 0.85rem; color: #3fb950; }
+
+        .system-log {
+            background: rgba(0,0,0,0.4);
+            border-left: 2px solid #58a6ff;
+            padding: 10px 15px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #58a6ff;
+            text-align: left;
+        }
+
+        .btn-group { display: flex; gap: 15px; margin-top: 10px; }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-decoration: none;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-home { background: transparent; color: #8b949e; border: 1px solid #30363d; }
+        .btn-home:hover { background: #30363d; color: white; }
+
+        .btn-profile { background: #3fb950; color: #0b0c10; border: 1px solid #3fb950; }
+        .btn-profile:hover { box-shadow: 0 0 15px rgba(63, 185, 80, 0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="modal-container">
+        <div class="success-icon">✅</div>
+        
+        <h1>Deployment Confirmed</h1>
+        
+        <p class="item-desc">
+            Your <strong>{{ qty }}x {{ item.name }}</strong> has been successfully secured for a {{ days }}-cycle deployment.
+        </p>
+
+        <div class="receipt-box">
+            <div class="receipt-title">Transaction Total</div>
+            <div class="receipt-total">₹{{ cost }}</div>
+            <div class="receipt-id">Receipt ID: {{ rec_id }}</div>
+        </div>
+
+        <div class="system-log">
+            > SYSTEM ARCHITECTURE LOG:<br>
+            > [SUCCESS] Transaction logged to Ledger.<br>
+            > [SUCCESS] Auth token verified.
+        </div>
+
+        <div class="btn-group">
+            <a href="/" class="btn btn-home">Return to Armory</a>
+            <a href="/profile" class="btn btn-profile">View Profile</a>
+        </div>
+    </div>
+
+</body>
+</html>

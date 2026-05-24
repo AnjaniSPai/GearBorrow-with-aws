@@ -1,0 +1,315 @@
+<!---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GearBorrow | Equipment Loadout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0d1117; background: linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url('/static/bg1.jpeg') no-repeat center center fixed; background-size: cover; color: #c9d1d9; min-height: 100vh; }
+        .hud-bar { background: rgba(22, 27, 34, 0.8); border-bottom: 2px solid #ff7b00; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(5px); }
+        .hud-title { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; color: #ff7b00; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+        .hud-user { font-size: 0.9rem; color: #8b949e; }
+        .hud-user span { color: #58a6ff; font-weight: bold; }
+        .hud-user a { color: #ff7b00; text-decoration: none; margin-left: 15px; border: 1px solid #ff7b00; padding: 5px 10px; border-radius: 3px; transition: 0.3s;}
+        .hud-user a:hover { background: #ff7b00; color: #0d1117; }
+        
+        .container { padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .card { background: rgba(22, 27, 34, 0.6); border: 1px solid #30363d; border-left: 4px solid #30363d; padding: 30px; text-align: center; border-radius: 4px; backdrop-filter: blur(10px); transition: all 0.3s ease; }
+        .card:hover { border-left-color: #ff7b00; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 123, 0, 0.1); }
+        .emoji { font-size: 4rem; margin-bottom: 15px; filter: drop-shadow(0px 0px 10px rgba(255,255,255,0.2)); }
+        
+        h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; color: #ffffff; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; }
+        .price { color: #8b949e; font-weight: 600; margin-bottom: 20px; }
+        .status-badge { display: inline-block; padding: 5px 10px; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; border-radius: 2px; }
+        .available { background: rgba(46, 160, 67, 0.1); color: #3fb950; border: 1px solid #3fb950; }
+        .rented { background: rgba(248, 81, 73, 0.1); color: #ff7b72; border: 1px solid #ff7b72; }
+        
+        input[type="number"] { width: 60px; padding: 10px; background: rgba(13, 17, 23, 0.8); border: 1px solid #ff7b00; color: white; border-radius: 3px; text-align: center; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; }
+        button { width: 100%; padding: 12px; background: transparent; color: #ff7b00; border: 2px solid #ff7b00; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #ff7b00; color: #0d1117; }
+        .btn-return { border-color: #58a6ff; color: #58a6ff; }
+        .btn-return:hover { background: #58a6ff; color: #0d1117; }
+    </style>
+</head>
+<body>
+    <div class="hud-bar">
+        <h1 class="hud-title">⚡ GearBorrow | Armory</h1>
+        <div class="hud-user">
+            Player: <span>{{ current_user }}</span> 
+            {% if role == 'admin' %}
+                <a href="/admin" style="border-color: #c026d3; color: #c026d3;">Admin Hub</a>
+            {% endif %}
+            <a href="/logout">Disconnect</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="grid">
+            {% for item in gadgets %}
+            <div class="card">
+                <div class="emoji">{{ item.emoji }}</div>
+                <h3>{{ item.name }}</h3>
+                <p class="price">₹{{ item.price_per_day }} / Cycle</p>
+                
+                {% if item.status == 'Available' %}
+                    <span class="status-badge available">Available</span>
+                    <form action="/rent/{{ item._id }}" method="POST">
+                        <label style="display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 5px;">Cycles Required:</label>
+                        <input type="number" name="days" value="1" min="1" max="14" required>
+                        <button type="submit">Acquire Equipment</button>
+                    </form>
+                {% else %}
+                    <span class="status-badge rented">Deployed</span>
+                    <p style="font-size: 0.85rem; color: #8b949e;">Held by: {{ item.rented_by }}</p>
+                    
+                    {% if role == 'admin' or item.rented_by == current_user %}
+                        <form action="/return/{{ item._id }}" method="POST" style="margin-top: 15px;">
+                            <button type="submit" class="btn-return">Recall Equipment</button>
+                        </form>
+                    {% else %}
+                        <p style="font-size: 0.8rem; color: #ff7b72; margin-top: 15px;">Locked: Insufficient Clearance</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+
+--->
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GearBorrow | Equipment Loadout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0d1117; background: linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url('/static/bg1.jpeg') no-repeat center center fixed; background-size: cover; color: #c9d1d9; min-height: 100vh; }
+        .hud-bar { background: rgba(22, 27, 34, 0.8); border-bottom: 2px solid #ff7b00; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(5px); }
+        .hud-title { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; color: #ff7b00; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+        .hud-user { font-size: 0.9rem; color: #8b949e; }
+        .hud-user span { color: #58a6ff; font-weight: bold; }
+        .hud-user a { color: #ff7b00; text-decoration: none; margin-left: 15px; border: 1px solid #ff7b00; padding: 5px 10px; border-radius: 3px; transition: 0.3s;}
+        .hud-user a:hover { background: #ff7b00; color: #0d1117; }
+        
+        .container { padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .card { background: rgba(22, 27, 34, 0.6); border: 1px solid #30363d; border-left: 4px solid #30363d; padding: 30px; text-align: center; border-radius: 4px; backdrop-filter: blur(10px); transition: all 0.3s ease; }
+        .card:hover { border-left-color: #ff7b00; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 123, 0, 0.1); }
+        .emoji { font-size: 4rem; margin-bottom: 15px; filter: drop-shadow(0px 0px 10px rgba(255,255,255,0.2)); }
+        
+        h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; color: #ffffff; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; }
+        .price { color: #8b949e; font-weight: 600; margin-bottom: 20px; }
+        .status-badge { display: inline-block; padding: 5px 10px; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; border-radius: 2px; }
+        .available { background: rgba(46, 160, 67, 0.1); color: #3fb950; border: 1px solid #3fb950; }
+        .rented { background: rgba(248, 81, 73, 0.1); color: #ff7b72; border: 1px solid #ff7b72; }
+        
+        input[type="number"] { width: 60px; padding: 10px; background: rgba(13, 17, 23, 0.8); border: 1px solid #ff7b00; color: white; border-radius: 3px; text-align: center; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; }
+        button { width: 100%; padding: 12px; background: transparent; color: #ff7b00; border: 2px solid #ff7b00; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #ff7b00; color: #0d1117; }
+        .btn-return { border-color: #58a6ff; color: #58a6ff; }
+        .btn-return:hover { background: #58a6ff; color: #0d1117; }
+    </style>
+</head>
+<body>
+    <div class="hud-bar">
+        <h1 class="hud-title">⚡ GearBorrow | Armory</h1>
+        <div class="hud-user">
+            Player: <span>{{ current_user }}</span> 
+            {% if role == 'admin' %}
+                <a href="/admin" style="border-color: #c026d3; color: #c026d3;">Admin Hub</a>
+            {% endif %}
+            <a href="/logout">Disconnect</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="grid">
+            {% for item in gadgets %}
+            <div class="card">
+                {% if item.image_path %}
+                    <img src="{{ item.image_path }}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 0 20px rgba(255, 123, 0, 0.1);">
+                {% else %}
+                    <div class="emoji">{{ item.emoji }}</div>
+                {% endif %}
+                
+                <h3>{{ item.name }}</h3>
+                <p class="price">₹{{ item.price_per_day }} / Cycle</p>
+                
+                {% if item.status == 'Available' %}
+                    <span class="status-badge available">Available</span>
+                    <form action="/rent/{{ item._id }}" method="POST">
+                        <label style="display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 5px;">Cycles Required:</label>
+                        <input type="number" name="days" value="1" min="1" max="14" required>
+                        <button type="submit">Acquire Equipment</button>
+                    </form>
+                {% else %}
+                    <span class="status-badge rented">Deployed</span>
+                    <p style="font-size: 0.85rem; color: #8b949e;">Held by: {{ item.rented_by }}</p>
+                    
+                    {% if role == 'admin' or item.rented_by == current_user %}
+                        <form action="/return/{{ item._id }}" method="POST" style="margin-top: 15px;">
+                            <button type="submit" class="btn-return">Recall Equipment</button>
+                        </form>
+                    {% else %}
+                        <p style="font-size: 0.8rem; color: #ff7b72; margin-top: 15px;">Locked: Insufficient Clearance</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GearBorrow | Equipment Loadout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0d1117; background: linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url('/static/bg1.jpeg') no-repeat center center fixed; background-size: cover; color: #c9d1d9; min-height: 100vh; }
+        .hud-bar { background: rgba(22, 27, 34, 0.8); border-bottom: 2px solid #ff7b00; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(5px); }
+        .hud-title { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; color: #ff7b00; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+        .hud-user { font-size: 0.9rem; color: #8b949e; }
+        .hud-user span { color: #58a6ff; font-weight: bold; }
+        .hud-user a { color: #ff7b00; text-decoration: none; margin-left: 15px; border: 1px solid #ff7b00; padding: 5px 10px; border-radius: 3px; transition: 0.3s;}
+        .hud-user a:hover { background: #ff7b00; color: #0d1117; }
+        
+        .container { padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .card { background: rgba(22, 27, 34, 0.6); border: 1px solid #30363d; border-left: 4px solid #30363d; padding: 30px; text-align: center; border-radius: 4px; backdrop-filter: blur(10px); transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between;}
+        .card:hover { border-left-color: #ff7b00; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255, 123, 0, 0.1); }
+        .emoji { font-size: 4rem; margin-bottom: 15px; filter: drop-shadow(0px 0px 10px rgba(255,255,255,0.2)); }
+        
+        h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; color: #ffffff; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; }
+        .price { color: #8b949e; font-weight: 600; margin-bottom: 20px; }
+        .status-badge { display: inline-block; padding: 5px 10px; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; border-radius: 2px; }
+        .available { background: rgba(46, 160, 67, 0.1); color: #3fb950; border: 1px solid #3fb950; }
+        .rented { background: rgba(248, 81, 73, 0.1); color: #ff7b72; border: 1px solid #ff7b72; }
+        
+        input[type="number"] { width: 60px; padding: 10px; background: rgba(13, 17, 23, 0.8); border: 1px solid #ff7b00; color: white; border-radius: 3px; text-align: center; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; }
+        button { width: 100%; padding: 12px; background: transparent; color: #ff7b00; border: 2px solid #ff7b00; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #ff7b00; color: #0d1117; }
+        .btn-return { border-color: #58a6ff; color: #58a6ff; }
+        .btn-return:hover { background: #58a6ff; color: #0d1117; }
+    </style>
+</head>
+<body>
+    <div class="hud-bar">
+        <h1 class="hud-title">⚡ GearBorrow | Armory</h1>
+        <div class="hud-user">
+            Player: <span>{{ current_user }}</span> 
+            <a href="/profile" style="border-color: #58a6ff; color: #58a6ff;">Profile / Receipts</a>
+            {% if role == 'admin' %}
+                <a href="/admin" style="border-color: #c026d3; color: #c026d3;">Admin Hub</a>
+            {% endif %}
+            <a href="/logout">Disconnect</a>
+        </div>
+    </div>
+    <div class="container">
+        <!-- Flash Messages for Pre-Booking -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="background: rgba(46, 160, 67, 0.1); color: #3fb950; border: 1px solid #3fb950; padding: 15px; margin-bottom: 25px; text-align: center; border-radius: 4px; font-weight: bold; font-family: 'Inter', sans-serif;">
+                  ⚡ {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class="grid">
+            {% for item in gadgets %}
+            <div class="card">
+                <div>
+                    {% if item.image_path %}
+                        <img src="{{ item.image_path }}" style="width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 0 20px rgba(255, 123, 0, 0.1);">
+                    {% else %}
+                        <div class="emoji">{{ item.emoji }}</div>
+                    {% endif %}
+                    
+                    <h3>{{ item.name }}</h3>
+                    <p class="price">₹{{ item.price_per_day }} / Cycle</p>
+                </div>
+
+                <div>
+                    {% if item.available_stock > 0 %}
+                        <span class="status-badge available">{{ item.available_stock }} Units Available</span>
+                        
+                        <form action="/rent/{{ item._id }}" method="POST" style="margin-bottom: 15px;">
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <div style="flex: 1;">
+                                    <label style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 5px;">Cycles (Time):</label>
+                                    <input type="number" name="days" value="1" min="1" max="14" required style="width: 100%; box-sizing: border-box;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 5px;">Qty (Units):</label>
+                                    <input type="number" name="rent_qty" value="1" min="1" max="{{ item.available_stock }}" required style="width: 100%; box-sizing: border-box;">
+                                </div>
+                            </div>
+                            <button type="submit">Acquire Equipment</button>
+                        </form>
+                    {% else %}
+                        <span class="status-badge rented" style="display: block; text-align: center; margin-bottom: 15px;">Out of Stock</span>
+                        
+                        <!-- NEW: Pre-book UI integrated with your dark theme -->
+                        <div style="margin-top: 10px; padding-top: 15px; border-top: 1px dashed #30363d;">
+                            <button type="button" disabled style="border-color: #484f58; color: #484f58; cursor: not-allowed; margin-bottom: 10px;">Currently Rented Out</button>
+                            
+                            <small style="color: #8b949e; display: block; margin-bottom: 10px;">Check back soon for availability.</small>
+                            <form action="/prebook/{{ item._id }}" method="POST" style="margin-top: 10px;">
+                            <!-- Show calculated availability time -->
+                            <div style="margin-bottom: 15px; padding: 5px; border-bottom: 1px dashed #30363d;">
+                                <small style="color: #58a6ff; font-weight: bold; display: block; text-align: center;">
+                                    {% if item.days_until_available > 0 %}
+                                        ⏱️ Expected Availability: ~{{ item.days_until_available }} Day(s)
+                                    {% else %}
+                                        ⏱️ Expected Availability: Very Soon (Pending Return)
+                                    {% endif %}
+                                </small>
+                            </div>
+
+                            <!-- Inputs for Qty AND Days -->
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                                <div style="flex: 1;">
+                                    <label style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 5px; text-align: left;">Waitlist Qty:</label>
+                                    <input type="number" name="prebook_qty" value="1" min="1" max="{{ item.total_stock }}" required style="width: 100%; box-sizing: border-box; padding: 8px; background: rgba(13, 17, 23, 0.8); border: 1px solid #d29922; color: white; border-radius: 3px; text-align: center; font-family: 'Rajdhani', sans-serif;">
+                                </div>
+                                <div style="flex: 1;">
+                                    <label style="display: block; font-size: 0.75rem; color: #8b949e; margin-bottom: 5px; text-align: left;">Rent Days:</label>
+                                    <input type="number" name="prebook_days" value="1" min="1" required style="width: 100%; box-sizing: border-box; padding: 8px; background: rgba(13, 17, 23, 0.8); border: 1px solid #d29922; color: white; border-radius: 3px; text-align: center; font-family: 'Rajdhani', sans-serif;">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" style="width: 100%; padding: 10px; background: #d29922; color: #0d1117; border: none; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 3px; transition: 0.3s;">Pre-Book For Future</button>
+                        </form>
+                            <!--<form action="/prebook/{{ item._id }}" method="POST" style="margin-top: 10px;">
+                                <button type="submit" style="width: 100%; padding: 10px; background: #ff7b00; color: #0d1117; border: none; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 3px; transition: 0.3s;">Pre-Book For Future</button>
+                            </form>
+                        -->
+                        </div>
+                    {% endif %}
+
+                    {% if current_user in item.renters %}
+                        <form action="/return/{{ item._id }}" method="POST" style="margin-top: 15px;">
+                            <button type="submit" class="btn-return">Recall Your Equipment</button>
+                        </form>
+                    {% elif role == 'admin' and item.total_stock > item.available_stock %}
+                        <form action="/return/{{ item._id }}" method="POST" style="margin-top: 15px;">
+                            <button type="submit" class="btn-return" style="border-color: #c026d3; color: #c026d3;">Admin Force Recall</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GearBorrow | Global Ledger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: #0b0c10; color: #c9d1d9; padding: 40px; max-width: 1000px; margin: 0 auto; }
+        h1 { font-family: 'Rajdhani', sans-serif; color: #58a6ff; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid #30363d; padding-bottom: 10px;}
+        .card { background: rgba(31, 40, 51, 0.4); border: 1px solid #30363d; border-radius: 4px; padding: 20px; margin-bottom: 15px; }
+        .btn { background: #30363d; color: white; padding: 10px 15px; border: none; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; cursor: pointer; text-decoration: none; border-radius: 3px; font-weight: bold;}
+        .btn:hover { background: #58a6ff; color: #0b0c10; }
+        
+        @media print { .no-print { display: none !important; } body { background: white; color: black; } .card { border: 1px solid #ccc; } }
+    </style>
+</head>
+<body>
+    <div class="no-print" style="margin-bottom: 20px;">
+        <a href="/admin" class="btn">← Back to Admin Hub</a>
+        <button onclick="window.print()" class="btn" style="float: right; background: #58a6ff; color: #0b0c10;">🖨️ Export Ledger</button>
+    </div>
+
+    <h1>Master Transaction Ledger</h1>
+
+    {% if receipts %}
+        {% for rec in receipts %}
+        <!-- The left border color changes based on if the item is still rented out -->
+        <div class="card" style="border-left: 4px solid {% if 'Active' in rec.status %}#3fb950{% else %}#8b949e{% endif %};">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #1f2833; padding-bottom: 10px;">
+                <span style="font-family: monospace; color: #8b949e;">Receipt #: {{ rec._id }}</span>
+                <span style="font-family: monospace; color: #8b949e;">{{ rec.date }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="font-size: 1.2rem; color: white;">{{ rec.item_name }}</strong> (Qty: {{ rec.qty }})<br>
+                    <span style="color: #8b949e; font-size: 0.9rem;">
+                        Rented By: <strong style="color: #c026d3; font-size: 1.1rem; text-transform: uppercase;">{{ rec.username }}</strong>
+                    </span>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 1.4rem; color: #ff7b00; font-weight: bold;">₹{{ rec.total_cost }}</div>
+                    <div style="color: {% if 'Active' in rec.status %}#3fb950{% else %}#8b949e{% endif %}; font-weight: bold; font-size: 0.9rem;">
+                        Status: {{ rec.status }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No transactions recorded in the system yet.</p>
+    {% endif %}
+</body>
+</html>

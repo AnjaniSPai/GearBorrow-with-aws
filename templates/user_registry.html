@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Registry | GearBorrow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0d1117; color: white; font-family: 'Inter', sans-serif; padding: 40px; }
+        h1 { font-family: 'Rajdhani', sans-serif; color: #ff7b00; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #161b22; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border: 1px solid #30363d; }
+        th { background: #21262d; color: #ff7b00; font-family: 'Rajdhani', sans-serif; }
+        .btn-back { display: inline-block; margin-bottom: 20px; color: #58a6ff; text-decoration: none; border: 1px solid #58a6ff; padding: 8px 15px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <a href="/admin" class="btn-back">← Back to Command Center</a>
+    <h1>Registered Players Directory</h1>
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Role</th>
+        </tr>
+        {% for u in users %}
+        <tr>
+            <td style="color: #ff7b00; font-weight: bold;">{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.phone if u.phone else 'Not Provided' }}</td>
+            <td>{{ u.role }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

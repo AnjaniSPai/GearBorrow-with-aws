@@ -1,0 +1,507 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GearBorrow | Admin Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0c10; color: white; padding: 40px; max-width: 1000px; margin: 0 auto; }
+        h1 { font-family: 'Rajdhani', sans-serif; color: #c026d3; letter-spacing: 2px; text-transform: uppercase; }
+        .card { border: 1px solid #45a29e; padding: 15px; margin-bottom: 10px; border-radius: 5px; background: rgba(31, 40, 51, 0.4); }
+        a { color: #66fcf1; text-decoration: none; margin-left: 10px; }
+        a:hover { text-decoration: underline; }
+        
+        input { padding: 10px; background: #0d1117; color: white; border: 1px solid #ff7b00; border-radius: 3px; font-family: 'Inter', sans-serif;}
+        .btn-add { background: #ff7b00; color: #0b0c10; border: none; padding: 11px 20px; font-weight: bold; cursor: pointer; border-radius: 3px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; letter-spacing: 1px;}
+        .btn-add:hover { background: #e66e00; }
+        .btn-del { background: transparent; color: #f85149; border: 1px solid #f85149; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-weight: bold; transition: 0.3s;}
+        .btn-del:hover { background: #f85149; color: white; }
+    </style>
+</head>
+<body>
+    <h1>System Administrator Dashboard</h1>
+    <p style="color: #8b949e; border-bottom: 1px solid #1f2833; padding-bottom: 20px;">
+        Logged in as: <strong style="color: white;">{{ current_user }}</strong> | 
+        <a href="/logout">Logout</a> | 
+        <a href="/">Go to Armory</a>
+    </p>
+    
+    <h3 style="margin-top: 30px; color: #ff7b00; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem;">Armory Management Database:</h3>
+    
+    <div class="card" style="border-color: #ff7b00; padding: 20px; margin-bottom: 20px;">
+        <h4 style="color: #ff7b00; margin-top: 0; text-transform: uppercase;">Deploy New Equipment</h4>
+        <form action="/admin/add_item" method="POST" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="text" name="name" placeholder="Item Name (e.g. RTX 4090)" required style="flex-grow: 1;">
+            <input type="number" name="price" placeholder="Cycles (Price)" required style="width: 120px;">
+            <input type="text" name="emoji" placeholder="Emoji 🎮" required style="width: 80px;">
+            <button type="submit" class="btn-add">ADD TO DATABASE</button>
+        </form>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+        {% for item in gadgets %}
+        <div class="card" style="border-color: #1f2833; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <span style="font-size: 1.5rem; margin-right: 10px;">{{ item.emoji }}</span> 
+                <strong>{{ item.name }}</strong><br>
+                <span style="color: #8b949e; font-size: 0.85rem;">Status: {{ item.status }}</span>
+            </div>
+            <form action="/admin/delete_item/{{ item._id }}" method="POST">
+                <button type="submit" class="btn-del">DELETE</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3 style="margin-top: 50px; color: #45a29e; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem;">Registered Users Database:</h3>
+    {% for user in users %}
+        <div class="card">
+            <strong>Username:</strong> {{ user.username }} <br>
+            <strong>Email:</strong> {{ user.email }} <br>
+            <strong>Role:</strong> <span style="color: #ff7b00;">{{ user.role | upper }}</span>
+        </div>
+    {% endfor %}
+</body>
+</html>
+--->
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GearBorrow | Admin Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0c10; color: white; padding: 40px; max-width: 1000px; margin: 0 auto; }
+        h1 { font-family: 'Rajdhani', sans-serif; color: #c026d3; letter-spacing: 2px; text-transform: uppercase; }
+        .card { border: 1px solid #45a29e; padding: 15px; margin-bottom: 10px; border-radius: 5px; background: rgba(31, 40, 51, 0.4); }
+        a { color: #66fcf1; text-decoration: none; margin-left: 10px; }
+        a:hover { text-decoration: underline; }
+        
+        input { padding: 10px; background: #0d1117; color: white; border: 1px solid #ff7b00; border-radius: 3px; font-family: 'Inter', sans-serif;}
+        .btn-add { background: #ff7b00; color: #0b0c10; border: none; padding: 11px 20px; font-weight: bold; cursor: pointer; border-radius: 3px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; letter-spacing: 1px;}
+        .btn-add:hover { background: #e66e00; }
+        .btn-del { background: transparent; color: #f85149; border: 1px solid #f85149; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-weight: bold; transition: 0.3s;}
+        .btn-del:hover { background: #f85149; color: white; }
+    </style>
+</head>
+<body>
+    <h1>System Administrator Dashboard</h1>
+    <p style="color: #8b949e; border-bottom: 1px solid #1f2833; padding-bottom: 20px;">
+        Logged in as: <strong style="color: white;">{{ current_user }}</strong> | 
+        <a href="/logout">Logout</a> | 
+        <a href="/">Go to Armory</a>
+    </p>
+    
+    <h3 style="margin-top: 30px; color: #ff7b00; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem;">Armory Management Database:</h3>
+    
+    <div class="card" style="border-color: #ff7b00; padding: 20px; margin-bottom: 20px;">
+        <h4 style="color: #ff7b00; margin-top: 0; text-transform: uppercase;">Deploy New Equipment</h4>
+        
+        <form action="/admin/add_item" method="POST" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            
+            <input type="text" name="name" placeholder="Item Name (e.g. PS5)" required style="flex-grow: 1;">
+            <input type="number" name="price" placeholder="Cycles/Day" required style="width: 110px;">
+            <input type="number" name="quantity" placeholder="Qty" value="1" min="1" required style="width: 70px;">
+            
+            <div style="background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 3px; display: flex; align-items: center; gap: 10px; border: 1px solid #1f2833;">
+                <input type="text" name="emoji" placeholder="Emoji 🎮" style="width: 80px; margin: 0;">
+                <span style="color: #8b949e; font-size: 0.8rem; font-weight: bold;">OR</span>
+                <input type="file" name="image" accept="image/*" style="width: 200px; margin: 0; border: none; padding: 5px;">
+            </div>
+
+            <button type="submit" class="btn-add">ADD TO DATABASE</button>
+        </form>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+        {% for item in gadgets %}
+        <div class="card" style="border-color: #1f2833; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                {% if item.image_path %}
+                    <img src="{{ item.image_path }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; vertical-align: middle;">
+                {% else %}
+                    <span style="font-size: 1.5rem; margin-right: 10px; vertical-align: middle;">{{ item.emoji }}</span> 
+                {% endif %}
+                
+                <strong>{{ item.name }}</strong><br>
+                <span style="color: #8b949e; font-size: 0.85rem;">Status: {{ item.status }}</span>
+            </div>
+            <form action="/admin/delete_item/{{ item._id }}" method="POST">
+                <button type="submit" class="btn-del">DELETE</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3 style="margin-top: 50px; color: #45a29e; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem;">Registered Users Database:</h3>
+    {% for user in users %}
+        <div class="card">
+            <strong>Username:</strong> {{ user.username }} <br>
+            <strong>Email:</strong> {{ user.email }} <br>
+            <strong>Role:</strong> <span style="color: #ff7b00;">{{ user.role | upper }}</span>
+        </div>
+    {% endfor %}
+</body>
+</html>
+
+-->
+<!---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GearBorrow | Admin Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0b0c10; color: white; padding: 40px; max-width: 1000px; margin: 0 auto; }
+        h1 { font-family: 'Rajdhani', sans-serif; color: #c026d3; letter-spacing: 2px; text-transform: uppercase; }
+        .card { border: 1px solid #45a29e; padding: 15px; margin-bottom: 10px; border-radius: 5px; background: rgba(31, 40, 51, 0.4); }
+        a { color: #66fcf1; text-decoration: none; margin-left: 10px; }
+        a:hover { text-decoration: underline; }
+        
+        input { padding: 10px; background: #0d1117; color: white; border: 1px solid #ff7b00; border-radius: 3px; font-family: 'Inter', sans-serif;}
+        .btn-add { background: #ff7b00; color: #0b0c10; border: none; padding: 11px 20px; font-weight: bold; cursor: pointer; border-radius: 3px; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; letter-spacing: 1px;}
+        .btn-add:hover { background: #e66e00; }
+        .btn-del { background: transparent; color: #f85149; border: 1px solid #f85149; padding: 6px 12px; border-radius: 3px; cursor: pointer; font-weight: bold; transition: 0.3s;}
+        .btn-del:hover { background: #f85149; color: white; }
+    </style>
+</head>
+<body>
+    <h1>System Administrator Dashboard</h1>
+    <p style="color: #8b949e; border-bottom: 1px solid #1f2833; padding-bottom: 20px;">
+        Logged in as: <strong style="color: white;">{{ current_user }}</strong> | 
+        <a href="/logout">Logout</a> | 
+        <a href="/">Go to Armory</a>
+    </p>
+    
+    <h3 style="margin-top: 30px; color: #ff7b00; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem;">Armory Management Database:</h3>
+    
+    <div class="card" style="border-color: #ff7b00; padding: 20px; margin-bottom: 20px;">
+        <h4 style="color: #ff7b00; margin-top: 0; text-transform: uppercase;">Deploy New Equipment</h4>
+        <form action="/admin/add_item" method="POST" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            
+            <input type="text" name="name" placeholder="Item Name (e.g. PS5)" required style="flex-grow: 1;">
+            <input type="number" name="price" placeholder="Cycles/Day" required style="width: 110px;">
+            <input type="number" name="quantity" placeholder="Qty" value="1" min="1" required style="width: 70px;">
+            
+            <div style="background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 3px; display: flex; align-items: center; gap: 10px; border: 1px solid #1f2833;">
+                <input type="text" name="emoji" placeholder="Emoji 🎮" style="width: 80px; margin: 0;">
+                <span style="color: #8b949e; font-size: 0.8rem; font-weight: bold;">OR</span>
+                <input type="file" name="image" accept="image/*" style="width: 200px; margin: 0; border: none; padding: 5px;">
+            </div>
+
+            <button type="submit" class="btn-add">ADD TO DATABASE</button>
+        </form>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px;">
+        {% for item in gadgets %}
+        <div class="card" style="border-color: #1f2833; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                {% if item.image_path %}
+                    <img src="{{ item.image_path }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px; vertical-align: middle;">
+                {% else %}
+                    <span style="font-size: 1.5rem; margin-right: 10px; vertical-align: middle;">{{ item.emoji }}</span> 
+                {% endif %}
+                
+                <strong>{{ item.name }}</strong><br>
+                <span style="color: #8b949e; font-size: 0.85rem;">
+                    Available: <strong style="color: #3fb950;">{{ item.available_stock }}</strong> / {{ item.total_stock }}<br>
+                    Rented By: <span style="color: #58a6ff;">{{ item.renters | join(', ') if item.renters else 'None' }}</span>
+                </span>
+            </div>
+            <form action="/admin/delete_item/{{ item._id }}" method="POST">
+                <button type="submit" class="btn-del">DELETE</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3 style="margin-top: 50px; color: #45a29e; font-family: 'Rajdhani', sans-serif; font-size: 1.5rem;">Registered Users Database:</h3>
+    {% for user in users %}
+        <div class="card">
+            <strong>Username:</strong> {{ user.username }} <br>
+            <strong>Email:</strong> {{ user.email }} <br>
+            <strong>Role:</strong> <span style="color: #ff7b00;">{{ user.role | upper }}</span>
+        </div>
+    {% endfor %}
+</body>
+</html>
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Command Center | GearBorrow</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    
+    <style>
+        :root {
+            --fc-page-bg-color: #161b22;
+            --fc-neutral-bg-color: #0d1117;
+            --fc-neutral-text-color: #c9d1d9;
+            --fc-border-color: #30363d;
+            --fc-button-text-color: #c9d1d9;
+            --fc-button-bg-color: #21262d;
+            --fc-button-border-color: #30363d;
+            --fc-button-hover-bg-color: #30363d;
+            --fc-button-hover-border-color: #8b949e;
+            --fc-button-active-bg-color: #ff7b00;
+            --fc-button-active-border-color: #ff7b00;
+            --fc-today-bg-color: rgba(255, 123, 0, 0.1);
+        }
+
+        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+
+        .hud-bar { background: rgba(22, 27, 34, 0.9); border-bottom: 2px solid #ff7b00; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .hud-title { font-family: 'Rajdhani', sans-serif; font-size: 1.8rem; color: #ff7b00; margin: 0; text-transform: uppercase; letter-spacing: 2px;}
+        .btn-back { color: #58a6ff; text-decoration: none; border: 1px solid #58a6ff; padding: 8px 15px; border-radius: 4px; transition: 0.3s ease; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;}
+        .btn-back:hover { background: #58a6ff; color: #0d1117; }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        
+        #calendar { background: #161b22; padding: 20px; border-radius: 8px; border: 1px solid #30363d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; cursor: pointer; }
+
+        /* NEW: Styling for the Fine Calculator Panel */
+        .fine-panel {
+            background: #161b22;
+            border: 1px solid #ff7b00;
+            border-left: 5px solid #ff7b00;
+            padding: 20px;
+            margin-bottom: 50px;
+            border-radius: 4px;
+            display: none; /* Hidden until a date is clicked */
+        }
+
+        h2 { font-family: 'Rajdhani', sans-serif; color: #ffffff; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+
+        table { width: 100%; border-collapse: collapse; background: #161b22; border-radius: 8px; overflow: hidden; border: 1px solid #30363d;}
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #30363d; }
+        th { background: #21262d; color: #ff7b00; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; letter-spacing: 1px; font-size: 1.1rem; }
+        tr:hover { background: rgba(255, 123, 0, 0.05); }
+        
+        .btn-ret { background: transparent; color: #ff7b72; border: 1px solid #ff7b72; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: 0.3s ease; font-family: 'Rajdhani', sans-serif; font-weight: bold; text-transform: uppercase;}
+        .btn-ret:hover { background: #ff7b72; color: #0d1117; }
+        
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; text-align: center; font-weight: bold;}
+        .alert-success { background: rgba(46, 160, 67, 0.1); color: #3fb950; border: 1px solid #3fb950; }
+        .alert-danger { background: rgba(248, 81, 73, 0.1); color: #ff7b72; border: 1px solid #ff7b72; }
+    </style>
+</head>
+<body>
+    <div class="hud-bar">
+        <h1 class="hud-title">⚡ Admin Command Center</h1>
+        <div>
+            <a href="/admin/users" class="btn-back" style="border-color: #3fb950; color: #3fb950; margin-right: 15px;">👤 User Registry</a>
+            <a href="/admin/ledger" class="btn-back" style="border-color: #d29922; color: #d29922; margin-right: 15px;">📄 Master Ledger</a>
+            <a href="/" class="btn-back">← Return to Armory</a>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <h2>Active Deployment Schedule</h2>
+        <p style="color: #8b949e; font-size: 0.9rem;"><em>Click any date on the calendar to preview late fines for that specific day.</em></p>
+        <div id='calendar'></div>
+
+        <!-- NEW: The Panel that appears when a date is clicked -->
+        <div id="fine-panel" class="fine-panel"></div>
+
+        <h2>Active Rentals List</h2>
+        <table>
+            <tr>
+                <th>Equipment</th>
+                <th>Player ID</th>
+                <th>Contact Number</th>
+                <th>Expected Return</th>
+                <th>Action</th>
+            </tr>
+            {% for rental in active_rentals %}
+            <tr>
+                <td><strong style="color: #58a6ff;">{{ rental.item_name }}</strong></td>
+                <td>{{ rental.username }}</td>
+                <td>{{ rental.user_phone }}</td>
+                <td>
+                    {% if rental.expected_return %}
+                        {% if rental.expected_return < today_date %}
+                            <span style="color: #ff7b72; font-weight: bold;">{{ rental.expected_return.strftime('%Y-%m-%d') }} (OVERDUE)</span>
+                        {% else %}
+                            {{ rental.expected_return.strftime('%Y-%m-%d') }}
+                        {% endif %}
+                    {% else %}
+                        <span style="color: #8b949e;">N/A</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form action="/return_item/{{ rental._id }}" method="POST" style="margin: 0;">
+                        <button type="submit" class="btn-ret">Process Return</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: #8b949e; padding: 30px;">No active deployments at this time.</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>POSITION</th>
+                    <th>EQUIPMENT</th>
+                    <th>PLAYER ID</th>
+                    <th>REQUESTED</th>
+                    <th>DATE LOGGED</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for g in gadgets %}
+                    {% if g.waitlist %}
+                        {% for entry in g.waitlist %}
+                        <tr>
+                            <td style="color: #ffb700; font-weight: bold;">#{{ loop.index }}</td>
+                            <td>{{ g.name }}</td>
+                            <td style="color: #58a6ff;">{{ entry.username }}</td>
+                            <td>{{ entry.qty }} Unit(s) for {{ entry.days }} Day(s)</td>
+                            <td style="font-size: 0.8rem; color: #8b949e;">{{ entry.timestamp }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- NEW: Global Receipt / Master Ledger Button -->
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="/admin/ledger" style="display: inline-block; padding: 15px 30px; background: transparent; color: #c026d3; border: 2px solid #c026d3; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.background='#c026d3'; this.style.color='#0d1117';" onmouseout="this.style.background='transparent'; this.style.color='#c026d3';">
+                📄 View Global Master Ledger (All Users)
+            </a>
+        </div>
+
+        <!-- NEW: Waitlist & Pre-Book Queue Table 
+        <h2 style="margin-top: 50px;">Waitlist / Pre-Booking Queue</h2>
+        <table style="margin-bottom: 50px;">
+            <tr>
+                <th style="background: #d29922; color: #0d1117;">Position</th>
+                <th style="background: #d29922; color: #0d1117;">Equipment</th>
+                <th style="background: #d29922; color: #0d1117;">Player ID</th>
+                <th style="background: #d29922; color: #0d1117;">Requested</th>
+                <th style="background: #d29922; color: #0d1117;">Date Logged</th>
+            </tr>
+            
+            {% set waitlist_empty = true %}
+            {% for item in gadgets %}
+                {% if item.waitlist %}
+                    {% set waitlist_empty = false %}
+                    {% for wait in item.waitlist %}
+                    <tr>
+                        <td style="color: #d29922; font-weight: bold; font-size: 1.2rem;">#{{ loop.index }}</td>
+                        <td><strong>{{ item.name }}</strong></td>
+                        <td>{{ wait.username }}</td>
+                        <td>{{ wait.qty }} Unit(s) for {{ wait.days }} Day(s)</td>
+                        <td style="color: #8b949e;">{{ wait.timestamp }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            
+            {% if waitlist_empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: #8b949e; padding: 30px;">The waitlist queue is currently empty.</td>
+            </tr>
+            {% endif %}
+        </table>-->
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          height: 650,
+          
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: '' /* Removed week and day views entirely */
+          },
+
+          // NEW: Interactive Click-to-Calculate-Fine Logic
+          dateClick: function(info) {
+              const panel = document.getElementById('fine-panel');
+              panel.style.display = 'block'; // Make the panel visible
+              
+              const clickedDate = new Date(info.dateStr);
+              let html = '<h3 style="color: #ff7b00; margin-top: 0; font-family: \'Rajdhani\', sans-serif; letter-spacing: 1px;">HYPOTHETICAL FINES FOR: ' + info.dateStr + '</h3>';
+              html += '<table style="margin-top: 10px;"><tr><th>Player</th><th>Item</th><th>Calculated Fine (₹500/day)</th></tr>';
+
+              let finesFound = false;
+
+              // Pull all rental data from Python into JavaScript
+              const rentals = [
+                  {% for r in active_rentals %}
+                  {% if r.expected_return %}
+                  {
+                      player: '{{ r.username }}',
+                      item: '{{ r.item_name }}',
+                      due: new Date('{{ r.expected_return.strftime("%Y-%m-%d") }}')
+                  },
+                  {% endif %}
+                  {% endfor %}
+              ];
+
+              // Check each rental against the clicked date
+              rentals.forEach(rental => {
+                  const diffTime = clickedDate - rental.due;
+                  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                  if (diffDays > 0) {
+                      finesFound = true;
+                      const fineAmount = diffDays * 500;
+                      html += '<tr>';
+                      html += '<td>' + rental.player + '</td>';
+                      html += '<td>' + rental.item + '</td>';
+                      html += '<td style="color: #ff7b72; font-weight: bold;">₹' + fineAmount + ' (' + diffDays + ' Days Late)</td>';
+                      html += '</tr>';
+                  }
+              });
+
+              if (!finesFound) {
+                  html += '<tr><td colspan="3" style="text-align: center; color: #3fb950; padding: 20px;">No items would incur fines if returned on this date.</td></tr>';
+              }
+
+              html += '</table>';
+              panel.innerHTML = html;
+              
+              // Scroll down slightly so the admin sees the panel
+              panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          },
+          
+          events: [
+            {% for r in active_rentals %}
+            {% if r.rented_on and r.expected_return %}
+            {
+              title: '{{ r.item_name }} ({{ r.username }})',
+              allDay: true,
+              start: '{{ r.rented_on.strftime("%Y-%m-%d") }}',
+              end: '{{ r.expected_return.strftime("%Y-%m-%d") }}',
+              color: '{% if r.expected_return < today_date %}#ff7b72{% else %}#ff7b00{% endif %}'
+            },
+            {% endif %}
+            {% endfor %}
+          ]
+        });
+        calendar.render();
+      });
+    </script>
+</body>
+</html>
